@@ -10,6 +10,7 @@ import os
 import datetime as dt
 from text import *
 import string
+from IPython.display import clear_output as clear
 
 # try:
 #     import readline #this module doesn't work on windows 
@@ -17,8 +18,8 @@ import string
 #     None
 
 
-def clear():
-    os.system('cls' if os.name == 'nt' else 'clear')
+# def clear():
+#     os.system('cls' if os.name == 'nt' else 'clear')
 
 def printSituation():
     clear()
@@ -108,142 +109,146 @@ clear()
 world = wld.World()
 player = Player(world)
 
-playing = True
-ticks = 1
-player.status()
-showHelp()
-while playing and player.is_alive():
-    printSituation()
-    commandSuccess = False
-    timePasses = False
-    while not commandSuccess:
-        commandSuccess = True
-        command = input(bold("What now? "))
-        print()
-        commandWords = command.lower().split() + [""]
-        if commandWords == []:
-            commandSuccess = False
-        elif commandWords[0].lower() == "go":   #cannot handle multi-word directions
-            if commandWords[1] in player.location.exitNames():
-                player.goDirection(commandWords[1]) 
-                timePasses = True
-                # When stealth gets lower, you're more likely to get shushed
-                if random.random() > player.stealth/player.maxstealth:
-                    player.shush()
-                    print("You got shushed, better lay off the beer...")
-                    input("Press enter to continue...")
-            else:
-                print("Can't go that way")
-                commandSuccess = False
-        elif commandWords[0].lower() == "pickup":  #can handle multi-word objects
-            targetName = command[7:]
-            target = player.location.getItemByName(targetName)
-            if target != False:
-                commandSuccess = player.pickup(target)
-            else:
-                print("No such item.")
-                commandSuccess = False
-        elif commandWords[0].lower() == "drop":
-            targetName = command[5:]
-            if player.getItemByName(targetName):
-                item = player.getItemByName(targetName)
-                commandSuccess = player.drop(item)
-            else:
-                print("You don't have that item.")
-                commandSuccess = False
-        elif commandWords[0].lower() == "inventory":
-            player.showInventory()        
-        elif commandWords[0].lower() == "help":
-            showHelp()
-        elif commandWords[0].lower() == "exit":
-            # save = input("Save game? (y/n)").lower()
-            # if save[0] == "y":
-            #     if not loaded:
-            #         while True:
-            #             game_name = input("Name your game: ")
-            #             for char in game_name:
-            #                 if char not in string.ascii_letters:
-            #                     print("Letters only, please.")
-            #                     break
-            #             else:
-            #                 break
-            #         file = "saves/"+game_name
-            #     os.makedirs(file, exist_ok = True)
-            #     with open(file+"/world.pickle", "wb") as world_save:
-            #         world_bytes = pickle.dumps(world, protocol = pickle.HIGHEST_PROTOCOL)
-            #         world_save.write(world_bytes)
-            #     with open(file+"/player.pickle", "wb") as player_save:
-            #         player_bytes = pickle.dumps(player, protocol = pickle.HIGHEST_PROTOCOL)
-            #         player_save.write(player_bytes)
-            #     # with open(file+"/updater.pickle", "wb") as updater_save:
-            #     #     pickle.dump(updater, updater_save, protocol = pickle.HIGHEST_PROTOCOL)
-            playing = False
-        elif commandWords[0].lower() == "wait":
-            if len(commandWords) > 2:
-                turns = int(commandWords[1])
-            else:
-                turns = 1
-            timePasses = True
-            ticks = turns
-        elif commandWords[0].lower() == "status":
-            player.status()
-        elif commandWords[0].lower() == "inspect":
-            targetName = command[8:]
-            # Try to find the item in the inventory then in the room
-            if player.location.getItemByName(targetName):
-                target = player.location.getItemByName(targetName)
-            elif player.getItemByName(targetName):
-                target = player.getItemByName(targetName)
-            else:
-                print("No such item.")
-                commandSuccess = False
-                continue
-            target.inspect()
-        elif commandWords[0].lower() == "use":
-            targetName = command[4:]
-            # same deal as inspect
-            target_player = player.getItemByName(targetName)
-            target_room = player.location.getItemByName(targetName)
-            if target_player != False:
-                if player.useItem(target_player) == False:
-                    commandSuccess = False
-            elif target_room != False:
-                target_room.use(player)
-                commandSuccess = False
-            else:
-                print("You don't have that item")
-                commandSuccess = False
-        elif commandWords[0] == "solve":
-            if player.location.hasBook():
-                if player.location.puzzle(player.location.book):
-                    # if the puzzle is solved use the special book method
-                    player.pickup_book(player.location.book)
-                if player.num_books == world.num_books:
-                    # A victory condition!
-                    clear()
-                    print(underline("Victory!"))
-                    print()
-                    print("You did it! You have all the books!")
-                    input("Press enter to continue...")
-                    playing = False
-            else:
-                print("You've already solved this puzzle!")
-                commandSuccess = False
-        elif commandWords[0] == "talk":
-            target = player.location.getMonsterByName(commandWords[1])
-            if target:
-                target.talk(player)
-                timePasses = True
-            else:
-                print("Nobody with that name...")
-                commandSuccess = False
-        else:
-            print("Not a valid command")
-            commandSuccess = False
-    if timePasses == True:
-        world.updateAll(ticks)
-        ticks = 1
 
+def game(player):
+    playing = True
+    ticks = 1
+    player.status()
+    showHelp()
+    while playing and player.is_alive():
+        printSituation()
+        commandSuccess = False
+        timePasses = False
+        while not commandSuccess:
+            commandSuccess = True
+            command = input(bold("What now? "))
+            print()
+            commandWords = command.lower().split() + [""]
+            if commandWords == []:
+                commandSuccess = False
+            elif commandWords[0].lower() == "go":   #cannot handle multi-word directions
+                if commandWords[1] in player.location.exitNames():
+                    player.goDirection(commandWords[1]) 
+                    timePasses = True
+                    # When stealth gets lower, you're more likely to get shushed
+                    if random.random() > player.stealth/player.maxstealth:
+                        player.shush()
+                        print("You got shushed, better lay off the beer...")
+                        input("Press enter to continue...")
+                else:
+                    print("Can't go that way")
+                    commandSuccess = False
+            elif commandWords[0].lower() == "pickup":  #can handle multi-word objects
+                targetName = command[7:]
+                target = player.location.getItemByName(targetName)
+                if target != False:
+                    commandSuccess = player.pickup(target)
+                else:
+                    print("No such item.")
+                    commandSuccess = False
+            elif commandWords[0].lower() == "drop":
+                targetName = command[5:]
+                if player.getItemByName(targetName):
+                    item = player.getItemByName(targetName)
+                    commandSuccess = player.drop(item)
+                else:
+                    print("You don't have that item.")
+                    commandSuccess = False
+            elif commandWords[0].lower() == "inventory":
+                player.showInventory()        
+            elif commandWords[0].lower() == "help":
+                showHelp()
+            elif commandWords[0].lower() == "exit":
+                # save = input("Save game? (y/n)").lower()
+                # if save[0] == "y":
+                #     if not loaded:
+                #         while True:
+                #             game_name = input("Name your game: ")
+                #             for char in game_name:
+                #                 if char not in string.ascii_letters:
+                #                     print("Letters only, please.")
+                #                     break
+                #             else:
+                #                 break
+                #         file = "saves/"+game_name
+                #     os.makedirs(file, exist_ok = True)
+                #     with open(file+"/world.pickle", "wb") as world_save:
+                #         world_bytes = pickle.dumps(world, protocol = pickle.HIGHEST_PROTOCOL)
+                #         world_save.write(world_bytes)
+                #     with open(file+"/player.pickle", "wb") as player_save:
+                #         player_bytes = pickle.dumps(player, protocol = pickle.HIGHEST_PROTOCOL)
+                #         player_save.write(player_bytes)
+                #     # with open(file+"/updater.pickle", "wb") as updater_save:
+                #     #     pickle.dump(updater, updater_save, protocol = pickle.HIGHEST_PROTOCOL)
+                playing = False
+            elif commandWords[0].lower() == "wait":
+                if len(commandWords) > 2:
+                    turns = int(commandWords[1])
+                else:
+                    turns = 1
+                timePasses = True
+                ticks = turns
+            elif commandWords[0].lower() == "status":
+                player.status()
+            elif commandWords[0].lower() == "inspect":
+                targetName = command[8:]
+                # Try to find the item in the inventory then in the room
+                if player.location.getItemByName(targetName):
+                    target = player.location.getItemByName(targetName)
+                elif player.getItemByName(targetName):
+                    target = player.getItemByName(targetName)
+                else:
+                    print("No such item.")
+                    commandSuccess = False
+                    continue
+                target.inspect()
+            elif commandWords[0].lower() == "use":
+                targetName = command[4:]
+                # same deal as inspect
+                target_player = player.getItemByName(targetName)
+                target_room = player.location.getItemByName(targetName)
+                if target_player != False:
+                    if player.useItem(target_player) == False:
+                        commandSuccess = False
+                elif target_room != False:
+                    target_room.use(player)
+                    commandSuccess = False
+                else:
+                    print("You don't have that item")
+                    commandSuccess = False
+            elif commandWords[0] == "solve":
+                if player.location.hasBook():
+                    if player.location.puzzle(player.location.book):
+                        # if the puzzle is solved use the special book method
+                        player.pickup_book(player.location.book)
+                    if player.num_books == world.num_books:
+                        # A victory condition!
+                        clear()
+                        print(underline("Victory!"))
+                        print()
+                        print("You did it! You have all the books!")
+                        input("Press enter to continue...")
+                        playing = False
+                else:
+                    print("You've already solved this puzzle!")
+                    commandSuccess = False
+            elif commandWords[0] == "talk":
+                target = player.location.getMonsterByName(commandWords[1])
+                if target:
+                    target.talk(player)
+                    timePasses = True
+                else:
+                    print("Nobody with that name...")
+                    commandSuccess = False
+            else:
+                print("Not a valid command")
+                commandSuccess = False
+        if timePasses == True:
+            world.updateAll(ticks)
+            ticks = 1
+
+def go():
+    game(player)
     
 
 

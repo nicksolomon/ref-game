@@ -1,10 +1,11 @@
-import os
+# import os
 
 import datetime as dt
 from text import *
+from IPython.display import clear_output as clear
 
-def clear():
-    os.system('cls' if os.name == 'nt' else 'clear')
+# def clear():
+    # os.system('cls' if os.name == 'nt' else 'clear')
 
 class Player:
     def __init__(self, world):
