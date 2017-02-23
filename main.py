@@ -250,5 +250,5 @@ def game(player):
 def go():
     game(player)
     
-
+go()
 
