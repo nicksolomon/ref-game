@@ -1,6 +1,6 @@
 import random
 import room
-# import os
+import os
 from text import *
 # from IPython.display import clear_output as clear
 
