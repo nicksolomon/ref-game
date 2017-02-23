@@ -10,7 +10,7 @@ import os
 import datetime as dt
 from text import *
 import string
-from IPython.display import clear_output as clear
+# from IPython.display import clear_output as clear
 
 # try:
 #     import readline #this module doesn't work on windows 
@@ -18,8 +18,8 @@ from IPython.display import clear_output as clear
 #     None
 
 
-# def clear():
-#     os.system('cls' if os.name == 'nt' else 'clear')
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def printSituation():
     clear()

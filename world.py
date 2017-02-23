@@ -6,16 +6,16 @@ import monster
 import character
 import puzzle
 import world
-#import os
+import os
 import datetime as dt
 import random
-from IPython.display import clear_output as clear
+#from IPython.display import clear_output as clear
 
 all_books = item.book_import()
 all_names = monster.name_import()
 
-# def clear():
-#     os.system('cls' if os.name == 'nt' else 'clear')
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 class World:
     def __init__(self):

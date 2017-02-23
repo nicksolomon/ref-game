@@ -1,11 +1,11 @@
 import random
 import item
-# import os
+import os
 from text import *
-from IPython.display import clear_output as clear
+# from IPython.display import clear_output as clear
 
-# def clear():
-    # os.system('cls' if os.name == 'nt' else 'clear')
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 class Monster:
     def __init__(self, name, room, world, health = 100):
