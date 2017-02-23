@@ -2,10 +2,10 @@ import random
 import room
 # import os
 from text import *
-from IPython.display import clear_output as clear
+# from IPython.display import clear_output as clear
 
-# def clear():
-#     os.system('cls' if os.name == 'nt' else 'clear')
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 class Character:
     def __init__(self, name, room, world):
