@@ -1,5 +1,6 @@
 import os
 from text import *
+import random
 #from IPython.display import clear_output as clear
 
 def clear():
@@ -126,6 +127,19 @@ class Kiosk(Item):
 
         # direction = path_to(self.loc, book.loc)
         # print("Head " + direction[1])
+
+class Printer(Item):
+    def __init__(self, name = "Printer", desc = "Printer"):
+        Item.__init__(self, name, desc, cost = 999)
+        self.paper_level = random.randint(0,100)
+        self.checked = False
+    def check_paper(self):
+        print("The paper tray is " + str(self.check_paper)+ "% full.")
+    def fill_paper(self):
+        self.paper_level = 100
+        self.checked = True
+    def use(self, player):
+        print("I hope you're not doing homework on the job. Check how much paper is left in the printer before you leave this room.")
 
 def book_import():
     """
