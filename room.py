@@ -75,6 +75,8 @@ class Comp_room(Room):
         Room.__init__(self, description)
         self.kiosk = item.Kiosk(book)
         self.kiosk.putInRoom(self)
+        self.printer = item.Printer()
+        self.printer.putInRoom(self)
 
 class Study_room(Room):
     def __init__(self, description = "A group study room! Maybe someone in here can help you out."):
