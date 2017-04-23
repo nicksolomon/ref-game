@@ -17,12 +17,13 @@ class Player:
         self.maxstress = 100
         self.stealth = 100
         self.maxstealth = 100
-        self.time = dt.datetime(2016, 11, 26, 0)
+        self.time = dt.datetime(2016, 11, 26, 9)
         self.desc = "In inventory"
         self.inv_max = 100
         self.inv_weight = 0
         self.world = world
         self.num_books = 0
+        self.num_completed = 0
         world.register(self)
     def goDirection(self, direction):
         self.location = self.location.getDestination(direction)
@@ -125,20 +126,10 @@ class Player:
         clear()
         print(underline("Player status"))
         print()
-        print("You have to find the books you need before the library closes at 2:30.")
-        print("These are the ones you still need to find:")
+        print("You have to complete 5 successful reference interviews before your shift is over at 11:00.")
+        print("So far, you've completed " + str(self.num_completed)) 
         print()
-        i = 1
-        for book in self.world.books:
-            if i < 10:
-                num = "[" + str(i) + "]  "
-            else:
-                num = "[" + str(i) + "] "
-            if book not in self.items:
-                print_list(bold(num) + bold(book.title))
-                i += 1
-        print()
-        print("Don't let your health get to zero, your stress get to 100, or the time get to 2:30. Good luck!")
+        print("Don't let your health get to zero, your stress get to 100, or the time get to 11:00. Good luck!")
         input("Press enter to continue...")
     def shush(self):
         self.stress += 5
@@ -150,7 +141,7 @@ class Player:
         if self.stealth < self.maxstealth:
             self.stealth += 1
     def is_alive(self):
-        if self.health > 0 and self.stress < 100 and self.time <= dt.datetime(2016, 11, 26, 2, 30):
+        if self.health > 0 and self.stress < 100 and self.time <= dt.datetime(2016, 11, 26, 11):
             return True
         else:
             clear()
