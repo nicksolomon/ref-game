@@ -2,7 +2,7 @@ import room as rm
 import os
 from player import Player
 import item
-import monster
+import patron
 import character
 import puzzle
 import world
@@ -12,21 +12,21 @@ import random
 #from IPython.display import clear_output as clear
 
 all_books = item.book_import()
-all_names = monster.name_import()
+all_names = patron.name_import()
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 class World:
     def __init__(self):
-        self.monsters = []
+        self.patrons = []
         self.characters = []
         self.num_books = 5
         self.books = random.sample(all_books, self.num_books)
         self.book_rooms = [rm.Book_room(book, puzzle.rand_puzzle()) for book in self.books]
         self.studies = [rm.Study_room() for i in range(self.num_books)]
         self.computers = [rm.Comp_room(book) for book in self.books]
-        self.num_monsters = 0
+        self.num_patrons = 0
         self.num_killed = 0
         self.updates = []
         self.start = rm.Room("This is the library, find the books.")
@@ -63,7 +63,7 @@ class World:
         
         # Let's add some people to the study rooms.
         for i in range(random.randint(3, 7)):
-            rand_type = monster.random_monster()
+            rand_type = patron.random_patron()
             in_room = random.choice(self.studies)
             rand_type(random.choice(all_names), in_room, self)
 
@@ -75,13 +75,13 @@ class World:
         self.register(self)
 
 
-    def addMonster(self, monster):
-        self.monsters.append(monster)
-        monster.room.addMonster(monster)
-        self.num_monsters += 1
-    def removeMonster(self, monster):
-        self.monsters.remove(monster)
-        monster.room.removeMonster(monster)
+    def addPatron(self, patron):
+        self.patrons.append(patron)
+        patron.room.addPatron(patron)
+        self.num_patrons += 1
+    def removePatron(self, patron):
+        self.patrons.remove(patron)
+        patron.room.removePatron(patron)
         self.num_killed += 1
     def addCharacter(self, character):
         self.characters.append(character)
@@ -91,13 +91,13 @@ class World:
         character.room.removeCharacter(character)
     def update(self):
         """
-        at every tick, add a random monster with probability equal
-        to the ratio of monsters killed to monsters created. This
-        means the more you talk to monsters, the more often they will
+        at every tick, add a random patron with probability equal
+        to the ratio of patrons killed to patrons created. This
+        means the more you talk to patrons, the more often they will
         be created.
         """
-        if random.random() < self.num_killed/self.num_monsters:
-            monster.random_monster()(random.choice(all_names), random.choice(self.studies), self)
+        if random.random() < self.num_killed/self.num_patrons:
+            patron.random_patron()(random.choice(all_names), random.choice(self.studies), self)
 
     # I moved the update functionality from the starter code into the
     # world class for simplicity.
@@ -115,9 +115,9 @@ class World:
     def clear(self):
         for room in self.studies:
             room.characters = []
-            room.monsters = []
+            room.patrons = []
         self.characters = []
-        self.monsters = []
+        self.patrons = []
 
 
 

@@ -7,27 +7,27 @@ from text import *
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-class Monster:
+class Patron:
     def __init__(self, name, room, world, health = 100):
         self.name = name
         self.health = health
         self.room = room
         self.world = world
-        world.addMonster(self)
+        world.addPatron(self)
         world.register(self)
     def update(self):
         if random.random() < .5:
             self.moveTo(random.choice(self.world.studies))
     def moveTo(self, room):
-        self.room.removeMonster(self)
+        self.room.removePatron(self)
         self.room = room
-        room.addMonster(self)
+        room.addPatron(self)
     def die(self):
         self.world.deregister(self)
-        self.world.removeMonster(self)
+        self.world.removePatron(self)
 
 
-class Talker(Monster):
+class Talker(Patron):
     def talk(self, player):
         clear()
         #updater.updateAll(ticks = 2)
@@ -44,7 +44,7 @@ class Talker(Monster):
         self.die() # you always win...
         input("Press enter to continue...")
 
-class Wanter(Monster):
+class Wanter(Patron):
     def talk(self, player):
         clear()
         player.health -= random.randint(5, 10) # Do some damage
@@ -59,7 +59,7 @@ class Wanter(Monster):
         self.die() #You always win
         input("Press enter to continue...")
 
-class Drinker(Monster):
+class Drinker(Patron):
     def talk(self, player):
         clear()
         print(underline("They sure were a party animal"))
@@ -74,9 +74,9 @@ class Drinker(Monster):
         self.die() #dead
         input("Press enter to continue...")
 
-def random_monster():
-    all_monsters = [Talker, Wanter, Drinker]
-    return random.choice(all_monsters)
+def random_patron():
+    all_patrons = [Talker, Wanter, Drinker]
+    return random.choice(all_patrons)
 
 def name_import():
     """

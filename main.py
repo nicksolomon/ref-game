@@ -2,7 +2,7 @@ import random
 import room as rm
 from player import Player
 import item
-import monster
+import patron
 import character
 import puzzle
 import world as wld
@@ -32,10 +32,10 @@ def printSituation():
     if player.location.__class__.__name__ == "Book_room" and not player.location.hasBook():
         print(bold("You've already gotten the book you need from this room."))
     print()
-    if player.location.hasMonsters():
+    if player.location.hasPatrons():
         print(bold("This room contains the following people:"))
-        for m in player.location.monsters:
-            print(red(m.name)) # Monsters are red
+        for m in player.location.patrons:
+            print(red(m.name)) # Patrons are red
         for c in player.location.characters:
             print(green(c.name)) # Characters are green
         print()
@@ -233,7 +233,7 @@ def game(player):
                     print("You've already solved this puzzle!")
                     commandSuccess = False
             elif commandWords[0] == "talk":
-                target = player.location.getMonsterByName(commandWords[1])
+                target = player.location.getPatronByName(commandWords[1])
                 if target:
                     target.talk(player)
                     timePasses = True

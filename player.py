@@ -100,7 +100,7 @@ class Player:
         print("Weight: " + str(self.inv_weight) + " of 100")
         print()
         input("Press enter to continue...")
-    # def attackMonster(self, mon):
+    # def attackPatron(self, mon):
     #     clear()
     #     print("You are attacking " + mon.name)
     #     print()

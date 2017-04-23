@@ -5,7 +5,7 @@ import puzzle
 class Room:
     def __init__(self, description):
         self.desc = description
-        self.monsters = []
+        self.patrons = []
         self.characters = []
         self.exits = []
         self.items = []
@@ -25,10 +25,10 @@ class Room:
         self.items.append(item)
     def removeItem(self, item):
         self.items.remove(item)
-    def addMonster(self, monster):
-        self.monsters.append(monster)
-    def removeMonster(self, monster):
-        self.monsters.remove(monster)
+    def addPatron(self, patron):
+        self.patrons.append(patron)
+    def removePatron(self, patron):
+        self.patrons.remove(patron)
     def addCharacter(self, character):
         self.characters.append(character)
     def removeCharacter(self, character):
@@ -52,10 +52,10 @@ class Room:
             if i.name.lower() == name.lower():
                 return i
         return False
-    def hasMonsters(self):
-        return self.monsters + self.characters != []
-    def getMonsterByName(self, name):
-        for i in self.monsters + self.characters:
+    def hasPatrons(self):
+        return self.patrons + self.characters != []
+    def getPatronByName(self, name):
+        for i in self.patrons + self.characters:
             if i.name.lower() == name.lower():
                 return i
         return False
